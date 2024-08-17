@@ -8,6 +8,9 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func main() {
@@ -58,7 +61,7 @@ type matchResult struct {
 
 // match returns the new file name, or an error if the file name didn't match our pattern
 func match(filename string) (*matchResult, error) {
-	// "birthday", "001", "txt"
+	// "gallery", "001", "txt"
 	pieces := strings.Split(filename, ".")
 	ext := pieces[len(pieces)-1]
 	tmp := strings.Join(pieces[0:len(pieces)-1], ".")
@@ -68,6 +71,8 @@ func match(filename string) (*matchResult, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s didn't match our pattern", filename)
 	}
-	return &matchResult{strings.Title(name), number, ext}, nil
+	title := cases.Title(language.English).String(name)
+
+	return &matchResult{title, number, ext}, nil
 
 }
